@@ -1,0 +1,53 @@
+server:
+    port: 8099
+
+spring:
+    application:
+        name: go-privates
+rocketmq:
+    producer:
+        group: ${spring.application.name}
+        # namespace: ${spring.application.name}
+    name-server: 127.0.0.1:9876
+
+elasticjob:
+    reg-center:
+        server-lists: 127.0.0.1:2181
+        namespace: go-privates
+    jobs:
+#        mySimpleJob:
+#            elasticJobClass: ai.lifo.goelasticjob.job.MySimpleJob
+#            cron: '0/1 0 * * * ?'
+#            sharding-total-count: 1
+#            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+#        myDataflowJob:
+#            elastic-job-class: ai.lifo.goelasticjob.job.MyDataflowJob
+#            cron: '0/5 * * * * ?'
+#            sharding-total-count: 3
+#            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+        myOneOffJob:
+            job-bootstrap-bean-name: myOneOffJob
+            elastic-job-class: ai.lifo.goelasticjob.job.MyTestOneJob
+            sharding-total-count: 3
+            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+            # 错误处理策略:记录日志策略、记录作业异常日志，但不中断作业执行
+            # LOG : 记录日志策略、记录作业异常日志，但不中断作业执行
+            # THROW : 抛出异常策略	抛出系统异常并中断作业执行
+            # IGNORE : 忽略异常策略	忽略系统异常且不中断作业执行
+            # WECHAT : 企业微信通知策略	发送企业微信消息通知，但不中断作业执行
+            job-error-handler-type: LOG
+            overwrite: true
+#        scriptJob:
+#            elastic-job-type: SCRIPT
+#            cron: '0/5 * * * * ?'
+#            sharding-total-count: 1
+#            description: "Script Job"
+#            props:
+#                script.command.line: "echo SCRIPT Job: "
+        manualScriptJob:
+            elastic-job-type: SCRIPT
+            job-bootstrap-bean-name: manualScriptJobBootstrap
+            sharding-total-count: 1
+            description: "Manual Script Job"
+            props:
+                script.command.line: "echo MANUAL SCRIPT Job: "

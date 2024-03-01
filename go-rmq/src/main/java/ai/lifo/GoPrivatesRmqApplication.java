@@ -7,11 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhanglifeng
  */
 @SpringBootApplication
-public class GoPrivatesApplication {
+public class GoPrivatesRmqApplication {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(GoPrivatesApplication.class, args);
+        SpringApplication.run(GoPrivatesRmqApplication.class, args);
     }
 
 }

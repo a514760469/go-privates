@@ -1,4 +1,4 @@
-package ai.lifo.rmq;
+package ai.lifo.rmq.producer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;
@@ -41,10 +41,10 @@ public class TransactionListener implements RocketMQLocalTransactionListener {
         try {
             Thread.sleep(10 * 1000L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         }
         RocketMQLocalTransactionState state = RocketMQLocalTransactionState.ROLLBACK;
-        if (Integer.parseInt(transactionId) % 2 == 0) {
+        if (transactionId != null && Integer.parseInt(transactionId) % 2 == 0) {
             //执行成功，可以提交事务
             state = RocketMQLocalTransactionState.COMMIT;
         }
@@ -57,7 +57,7 @@ public class TransactionListener implements RocketMQLocalTransactionListener {
     @Override
     public RocketMQLocalTransactionState checkLocalTransaction(Message message) {
         MessageHeaders headers = message.getHeaders();
-        //获取事务ID
+        // 获取事务ID
         String transactionId = (String) headers.get(RocketMQHeaders.TRANSACTION_ID);
         log.info("检查本地事务,事务ID:{}", transactionId);
         RocketMQLocalTransactionState state = TRANSACTION_STATE_MAP.get(transactionId);

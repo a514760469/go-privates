@@ -1,5 +1,6 @@
 package ai.lifo.rmq;
 
+import ai.lifo.rmq.producer.AsyncSendCallback;
 import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +85,7 @@ public class MQMessageController implements InitializingBean {
                 .setHeader(RocketMQHeaders.KEYS, id)
                 .build();
         // 设置发送地和消息信息并发送异步消息
-        rocketMQTemplate.asyncSend(asyncTag, message, new SendCallbackListener(id));
+        rocketMQTemplate.asyncSend(asyncTag, message, new AsyncSendCallback(id));
 
         log.info("pushAsyncMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();
@@ -167,6 +168,8 @@ public class MQMessageController implements InitializingBean {
         // 现在RocketMq并不支持任意时间的延时，需要设置几个固定的延时等级，从1s到2h分别对应着等级1到18
         // private String messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
         SendResult sendResult = rocketMQTemplate.syncSend(syncTag, message, 1000L, 4);
+//        SendResult sendResult = rocketMQTemplate.syncSendDelayTimeSeconds(syncTag, message, 60L);
+
         log.info("pushDelayMessage finish: " + id + ", sendResult : " + JSONObject.toJSONString(sendResult));
         ResponseMsg msg = new ResponseMsg();
         // 解析发送结果

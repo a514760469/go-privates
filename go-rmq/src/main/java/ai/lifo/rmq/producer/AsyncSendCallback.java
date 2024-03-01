@@ -1,4 +1,4 @@
-package ai.lifo.rmq;
+package ai.lifo.rmq.producer;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +10,11 @@ import org.apache.rocketmq.client.producer.SendResult;
  * @since 2024-02-18
  */
 @Slf4j
-public class SendCallbackListener implements SendCallback {
+public class AsyncSendCallback implements SendCallback {
 
     private final int id;
 
-    public SendCallbackListener(int id) {
+    public AsyncSendCallback(int id) {
         this.id = id;
     }
 

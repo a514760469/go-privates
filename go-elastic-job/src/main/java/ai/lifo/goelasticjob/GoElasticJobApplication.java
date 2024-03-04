@@ -3,6 +3,9 @@ package ai.lifo.goelasticjob;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author zhanglifeng
+ */
 @SpringBootApplication
 public class GoElasticJobApplication {
 

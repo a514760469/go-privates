@@ -4,22 +4,35 @@ server:
 spring:
     application:
         name: go-privates
-rocketmq:
-    producer:
-        group: ${spring.application.name}
-        # namespace: ${spring.application.name}
-    name-server: 127.0.0.1:9876
-
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/go_privates?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: 123456
 elasticjob:
     reg-center:
         server-lists: 127.0.0.1:2181
         namespace: go-privates
     jobs:
-#        mySimpleJob:
-#            elasticJobClass: ai.lifo.goelasticjob.job.MySimpleJob
-#            cron: '0/1 0 * * * ?'
-#            sharding-total-count: 1
-#            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+        mySimpleJob:
+            elasticJobClass: ai.lifo.goelasticjob.job.MySimpleJob
+            cron: '0 0/1 * * * ?'
+            sharding-total-count: 2
+            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+            description: 一秒一次Job
+            overwrite: true
+            disabled: true
+            job-listener-types:
+                - ai.lifo.goelasticjob.trace.GoElasticJobListener
+        ThrownTestJob:
+            elasticJobClass: ai.lifo.goelasticjob.job.ThrownTestJob
+            cron: '0 0/2 0/1 * * ?'
+            sharding-total-count: 1
+            description: 测试异常Job
+            overwrite: true
+            job-error-handler-type: ai.lifo.goelasticjob.trace.GoElasticJobErrorHandler
+            job-listener-types:
+                - ai.lifo.goelasticjob.trace.GoElasticJobListener
 #        myDataflowJob:
 #            elastic-job-class: ai.lifo.goelasticjob.job.MyDataflowJob
 #            cron: '0/5 * * * * ?'
@@ -37,14 +50,14 @@ elasticjob:
             # WECHAT : 企业微信通知策略	发送企业微信消息通知，但不中断作业执行
             job-error-handler-type: LOG
             overwrite: true
-        scriptJob:
-            elastic-job-type: SCRIPT
-            cron: '0/5 * * * * ?' # 每5秒执行一次
-            sharding-total-count: 1
-            description: "Script Job"
-            overwrite: true
-            props:
-                script.command.line: "cmd /c echo SCRIPT Job: "
+#        scriptJob:
+#            elastic-job-type: SCRIPT
+#            cron: '0/5 * * * * ?' # 每5秒执行一次
+#            sharding-total-count: 1
+#            description: "Script Job"
+#            overwrite: true
+#            props:
+#                script.command.line: "cmd /c echo SCRIPT Job: "
         manualScriptJob:
             elastic-job-type: SCRIPT
             job-bootstrap-bean-name: manualScriptJobBootstrap
@@ -54,4 +67,4 @@ elasticjob:
             props:
                 script.command.line: "cmd /c echo MANUAL SCRIPT Job: " # windows系统不好使
     tracing:
-        data-source:
+        type: RDB

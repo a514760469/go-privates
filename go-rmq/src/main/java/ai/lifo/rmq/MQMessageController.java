@@ -33,11 +33,11 @@ public class MQMessageController implements InitializingBean {
 
     private final RocketMQTemplate rocketMQTemplate;
 
-    private final String syncTag = "t_topic_1:syncTag";
+    private static final String SYNC_TAG = "t_topic_1:syncTag";
 
-    private final String asyncTag = "t_topic_1:asyncTag";
+    private static final String ASYNC_TAG = "t_topic_1:asyncTag";
 
-    private final String onewayTag = "t_topic_1:onewayTag";
+    private static final String ONEWAY_TAG = "t_topic_1:onewayTag";
 
     @PostMapping("/push")
     public String push(@RequestParam int id) {
@@ -60,7 +60,7 @@ public class MQMessageController implements InitializingBean {
                 .setHeader(RocketMQHeaders.KEYS, id)
                 .build();
         // 设置发送地和消息信息并发送同步消息
-        SendResult sendResult = rocketMQTemplate.syncSend(syncTag, message);
+        SendResult sendResult = rocketMQTemplate.syncSend(SYNC_TAG, message);
         log.info("pushMessage finish : " + id + ", sendResult : " + JSONObject.toJSONString(sendResult));
         ResponseMsg msg = new ResponseMsg();
         // 解析发送结果
@@ -85,7 +85,7 @@ public class MQMessageController implements InitializingBean {
                 .setHeader(RocketMQHeaders.KEYS, id)
                 .build();
         // 设置发送地和消息信息并发送异步消息
-        rocketMQTemplate.asyncSend(asyncTag, message, new AsyncSendCallback(id));
+        rocketMQTemplate.asyncSend(ASYNC_TAG, message, new AsyncSendCallback(id));
 
         log.info("pushAsyncMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();
@@ -109,7 +109,7 @@ public class MQMessageController implements InitializingBean {
                 .build();
 
         // 设置发送地和消息信息并发送单向消息
-        rocketMQTemplate.sendOneWay(onewayTag, message);
+        rocketMQTemplate.sendOneWay(ONEWAY_TAG, message);
         log.info("pushOneWayMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();
         msg.setSuccessData(null);
@@ -140,7 +140,7 @@ public class MQMessageController implements InitializingBean {
                         .build();
 
                 // 设置发送地和消息信息并发送消息（Orderly）
-                rocketMQTemplate.syncSendOrderly(syncTag, message, orderStep.getId());
+                rocketMQTemplate.syncSendOrderly(SYNC_TAG, message, orderStep.getId());
             }
         }
         log.info("pushSequenceMessage finish: " + id);
@@ -166,11 +166,37 @@ public class MQMessageController implements InitializingBean {
         // 设置超时和延时推送
         // 超时时针对请求broker然后结果返回给product的耗时
         // 现在RocketMq并不支持任意时间的延时，需要设置几个固定的延时等级，从1s到2h分别对应着等级1到18
-        // private String messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
-        SendResult sendResult = rocketMQTemplate.syncSend(syncTag, message, 1000L, 4);
+        // private String messageDelayLevel = "1s 5s 10s 30 s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
+        SendResult sendResult = rocketMQTemplate.syncSend(SYNC_TAG, message, 1000L, 4);
 //        SendResult sendResult = rocketMQTemplate.syncSendDelayTimeSeconds(syncTag, message, 60L);
 
         log.info("pushDelayMessage finish: " + id + ", sendResult : " + JSONObject.toJSONString(sendResult));
+        ResponseMsg msg = new ResponseMsg();
+        // 解析发送结果
+        if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
+            msg.setSuccessData(sendResult.getMsgId() + " : " + sendResult.getSendStatus());
+        }
+        return msg;
+    }
+
+    /**
+     * rocketmq 定时消息 (5.0 以上broker才支持)
+     *
+     * @param id 消息
+     * @return 结果
+     */
+    @RequestMapping("/pushMessage/timed")
+    public ResponseMsg pushTimedMessage(@RequestParam("id") int id) {
+        log.info("pushTimedMessage start: " + id);
+        // 构建消息
+        String messageStr = "order id: " + id;
+        Message<String> message = MessageBuilder.withPayload(messageStr)
+                .setHeader(RocketMQHeaders.KEYS, id)
+                .build();
+        // private String messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
+        SendResult sendResult = rocketMQTemplate.syncSendDelayTimeSeconds(SYNC_TAG, message, 30L);
+        log.info("pushTimedMessage finish: " + id + ", sendResult : " + JSONObject.toJSONString(sendResult));
+
         ResponseMsg msg = new ResponseMsg();
         // 解析发送结果
         if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
@@ -203,7 +229,7 @@ public class MQMessageController implements InitializingBean {
         ListSplitter<Message<String>> splitter = new ListSplitter<>(messages, 1024 * 1024 * 4);
         while (splitter.hasNext()) {
             List<Message<String>> listItem = splitter.next();
-            rocketMQTemplate.syncSend(syncTag, listItem);
+            rocketMQTemplate.syncSend(SYNC_TAG, listItem);
         }
         log.info("pushBatchMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();
@@ -232,7 +258,7 @@ public class MQMessageController implements InitializingBean {
                     .build();
             messages.add(message);
         }
-        rocketMQTemplate.syncSend(syncTag, messages);
+        rocketMQTemplate.syncSend(SYNC_TAG, messages);
         log.info("pushSqlMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();
         msg.setSuccessData(null);
@@ -255,7 +281,7 @@ public class MQMessageController implements InitializingBean {
                 .setHeader("money", 10)
                 .setHeader(RocketMQHeaders.TRANSACTION_ID, id)
                 .build();
-        TransactionSendResult transactionSendResult = rocketMQTemplate.sendMessageInTransaction(syncTag, message, null);
+        TransactionSendResult transactionSendResult = rocketMQTemplate.sendMessageInTransaction(SYNC_TAG, message, null);
         log.info("pushTransactionMessage result: " + JSONObject.toJSONString(transactionSendResult));
         log.info("pushTransactionMessage finish: " + id);
         ResponseMsg msg = new ResponseMsg();

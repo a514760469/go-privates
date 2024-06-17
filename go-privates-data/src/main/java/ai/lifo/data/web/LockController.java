@@ -31,7 +31,7 @@ public class LockController {
                 System.out.println("加锁成功，执行后续代码。线程 ID：" + Thread.currentThread().getId());
                 Thread.sleep(40000);
             } catch (Exception e) {
-                //TODO
+                //
             } finally {
                 lock.unlock();
                 // 3.解锁

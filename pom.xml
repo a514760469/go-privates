@@ -19,6 +19,7 @@
         <module>go-rmq</module>
         <module>go-privates-api</module>
         <module>go-privates-data</module>
+        <module>go-xd-late</module>
     </modules>
 
     <name>go-privates</name>
@@ -31,6 +32,7 @@
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
         <go-privates.version>0.0.1-SNAPSHOT</go-privates.version>
         <mysql.version>8.0.33</mysql.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -54,6 +56,14 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        druid:
+            validationQuery: SELECT 1
+            initialSize: 5
+            minIdle: 5
+            maxActive: 20
+            maxWait: 60000
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            maxPoolPreparedStatementPerConnectionSize: 20
+            connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: root
+            password: 123456
+            url: jdbc:mysql://localhost:3306/go_privates?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    redis:
+        cluster:
+            nodes: 10.150.30.214:6382,10.150.30.215:6382,10.150.30.216:6382,10.150.30.217:6382,10.150.30.218:6382,10.150.30.219:6382
+        password: hengchang
+        timeout: 100000
+        database: 0
+        lettuce:
+            pool:
+                max-active: 8
+                max-wait: -1
+                max-idle: 8
+                min-idle: 0

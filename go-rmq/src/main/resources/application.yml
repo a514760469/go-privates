@@ -14,3 +14,7 @@ rocketmq:
         group: ${spring.application.name}
         # namespace: ${spring.application.name}
     name-server: 127.0.0.1:9876
+
+logging:
+    file:
+        path: /data/logs/go-privates

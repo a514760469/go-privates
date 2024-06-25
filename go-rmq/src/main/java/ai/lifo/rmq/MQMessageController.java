@@ -166,7 +166,7 @@ public class MQMessageController implements InitializingBean {
         // 设置超时和延时推送
         // 超时时针对请求broker然后结果返回给product的耗时
         // 现在RocketMq并不支持任意时间的延时，需要设置几个固定的延时等级，从1s到2h分别对应着等级1到18
-        // private String messageDelayLevel = "1s 5s 10s 30 s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
+        // private String messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
         SendResult sendResult = rocketMQTemplate.syncSend(SYNC_TAG, message, 1000L, 4);
 //        SendResult sendResult = rocketMQTemplate.syncSendDelayTimeSeconds(syncTag, message, 60L);
 

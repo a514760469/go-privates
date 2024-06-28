@@ -20,6 +20,7 @@
         <module>go-privates-api</module>
         <module>go-privates-data</module>
         <module>go-xd-late</module>
+        <module>go-cloud-stream</module>
     </modules>
 
     <name>go-privates</name>

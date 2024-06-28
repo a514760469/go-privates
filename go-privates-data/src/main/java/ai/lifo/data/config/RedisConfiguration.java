@@ -47,17 +47,16 @@ public class RedisConfiguration implements ApplicationContextAware {
 
         Arrays.stream(applicationContext.getBeanDefinitionNames())
                 .map(applicationContext::getType).filter(Objects::nonNull)
-                .forEach(clazz -> {
-                            ReflectionUtils.doWithMethods(clazz, method -> {
-                                ReflectionUtils.makeAccessible(method);
-                                Cacheable cacheable = AnnotationUtils.findAnnotation(method, Cacheable.class);
-                                if (Objects.nonNull(cacheable)) {
-                                    for (String cache : cacheable.cacheNames()) {
-                                        config.put(cache, new CacheConfig(ttl, maxIdleTime));
-                                    }
+                .forEach(clazz ->
+                        ReflectionUtils.doWithMethods(clazz, method -> {
+                            ReflectionUtils.makeAccessible(method);
+                            Cacheable cacheable = AnnotationUtils.findAnnotation(method, Cacheable.class);
+                            if (Objects.nonNull(cacheable)) {
+                                for (String cache : cacheable.cacheNames()) {
+                                    config.put(cache, new CacheConfig(ttl, maxIdleTime));
                                 }
-                            });
-                        }
+                            }
+                        })
                 );
 
         RedissonSpringCacheManager cacheManager = new RedissonSpringCacheManager(redissonClient, config);

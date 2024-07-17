@@ -31,6 +31,6 @@ public class MyDataflowJob implements DataflowJob<String> {
     @Override
     public void processData(ShardingContext shardingContext, List<String> data) {
         log.info("消费dataflow job 数据：");
-        data.forEach(System.out::println);
+        data.forEach(s -> log.info("消费dataflow job 数据：{}", s));
     }
 }

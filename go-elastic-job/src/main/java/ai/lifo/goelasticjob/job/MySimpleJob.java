@@ -23,16 +23,21 @@ public class MySimpleJob implements SimpleJob {
             case 0:
                 // do something by sharding item 0
                 System.out.println("do something by sharding item 0");
-                doJob(0);
+                doJob(shardingContext.getShardingItem());
                 break;
             case 1:
                 // do something by sharding item 1
                 System.out.println("do something by sharding item 1");
-                doJob(1);
+
+//                if (shardingContext.getShardingParameter().equals("Shanghai")) {
+//                    throw new RuntimeException("Manually thrown test");
+//                }
+
+                doJob(shardingContext.getShardingItem());
                 break;
             case 2:
                 System.out.println("do something by sharding item 2");
-                doJob(2);
+                doJob(shardingContext.getShardingItem());
                 break;
             // case n: ...
         }
@@ -40,10 +45,10 @@ public class MySimpleJob implements SimpleJob {
     }
 
     private void doJob(int itemId) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println(itemId + ": 执行任务" + i + "," + LocalDateTime.now());
+        for (int i = 0; i < 5; i++) {
+            log.info("item: " + itemId + ": 执行任务" + i + "," + LocalDateTime.now());
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 log.error(e.getMessage(), e);
             }

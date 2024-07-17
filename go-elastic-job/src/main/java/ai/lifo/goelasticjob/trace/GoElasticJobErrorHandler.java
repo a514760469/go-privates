@@ -16,7 +16,7 @@ public class GoElasticJobErrorHandler implements JobErrorHandler {
 
     @Override
     public void handleException(String jobName, Throwable cause) {
-        System.err.println("handleException job：" + jobName);
+        System.err.println("GoElasticJobErrorHandler. handleException job: " + jobName);
         log.error(cause.getMessage(), cause);
     }
 

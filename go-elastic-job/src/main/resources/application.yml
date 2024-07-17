@@ -1,5 +1,5 @@
 server:
-    port: 8099
+    port: 0
 
 spring:
     application:
@@ -16,12 +16,15 @@ elasticjob:
     jobs:
         mySimpleJob:
             elasticJobClass: ai.lifo.goelasticjob.job.MySimpleJob
-            cron: '0 0/1 * * * ?'
+            cron: 0 * * * * ?
             sharding-total-count: 2
             sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
-            description: 一秒一次Job
+            description: 一分一次Job
             overwrite: true
-            disabled: true
+            disabled: false
+            failover: true
+            misfire: false
+            monitor-execution: true
             job-listener-types:
                 - ai.lifo.goelasticjob.trace.GoElasticJobListener
         ThrownTestJob:
@@ -30,14 +33,20 @@ elasticjob:
             sharding-total-count: 1
             description: 测试异常Job
             overwrite: true
+            disabled: true
             job-error-handler-type: ai.lifo.goelasticjob.trace.GoElasticJobErrorHandler
             job-listener-types:
                 - ai.lifo.goelasticjob.trace.GoElasticJobListener
-#        myDataflowJob:
-#            elastic-job-class: ai.lifo.goelasticjob.job.MyDataflowJob
-#            cron: '0/5 * * * * ?'
-#            sharding-total-count: 3
-#            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+        myDataflowJob:
+            elastic-job-class: ai.lifo.goelasticjob.job.MyDataflowJob
+            cron: '1 0/2 * * * ?'
+            sharding-total-count: 3
+            overwrite: true
+            disabled: true
+            sharding-item-parameters: 0=Beijing,1=Shanghai,2=Guangzhou
+            props:
+                streaming.process: true
+
         myOneOffJob:
             job-bootstrap-bean-name: myOneOffJob
             elastic-job-class: ai.lifo.goelasticjob.job.MyTestOneJob
@@ -50,6 +59,7 @@ elasticjob:
             # WECHAT : 企业微信通知策略	发送企业微信消息通知，但不中断作业执行
             job-error-handler-type: LOG
             overwrite: true
+            disabled: true
 #        scriptJob:
 #            elastic-job-type: SCRIPT
 #            cron: '0/5 * * * * ?' # 每5秒执行一次
@@ -60,11 +70,15 @@ elasticjob:
 #                script.command.line: "cmd /c echo SCRIPT Job: "
         manualScriptJob:
             elastic-job-type: SCRIPT
-            job-bootstrap-bean-name: manualScriptJobBootstrap
+            job-bootstrap-bean-name: manualScriptJob
             sharding-total-count: 1
             description: "Manual Script Job"
             overwrite: true
+            disabled: true
             props:
-                script.command.line: "cmd /c echo MANUAL SCRIPT Job: " # windows系统不好使
+                script.command.line: "cmd /c echo MANUAL SCRIPT Job: " # 注意系统环境
     tracing:
         type: RDB
+    dump:
+#        port: 9888
+        enabled: true

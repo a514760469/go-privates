@@ -75,6 +75,11 @@
                 <version>${mysql.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fast-json</artifactId>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

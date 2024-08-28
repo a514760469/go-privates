@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.lifo.data.mapper.JobExecutionTraceMapper">
+    <resultMap id="BaseResultMap" type="ai.lifo.data.entity.JobExecutionTraceEntity">
+        <!--@mbg.generated-->
+        <!--@Table jsd_xd_job_execution_trace-->
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+        <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+        <result column="capital_source" jdbcType="INTEGER" property="capitalSource" />
+        <result column="job_type" jdbcType="INTEGER" property="jobType" />
+        <result column="parameter" jdbcType="VARCHAR" property="parameter" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="execute_at" jdbcType="TIMESTAMP" property="executeAt" />
+        <result column="trigger_date" jdbcType="TIMESTAMP" property="triggerDate" />
+        <result column="finished_at" jdbcType="TIMESTAMP" property="finishedAt" />
+        <result column="failed_cause" jdbcType="VARCHAR" property="failedCause" />
+        <result column="created_at" javaType="java.time.LocalDateTime" property="createdAt" />
+        <result column="updated_at" javaType="java.time.LocalDateTime" property="updatedAt" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        job_name,
+        method_name,
+        capital_source,
+        job_type,
+        `parameter`,
+        `status`,
+        execute_at,
+        trigger_date,
+        finished_at,
+        failed_cause,
+        created_at,
+        updated_at
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List" />
+        from jsd_xd_job_execution_trace
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="ai.lifo.data.entity.JobExecutionTraceEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into jsd_xd_job_execution_trace (job_name, method_name, capital_source, job_type,
+                                                `parameter`, `status`, execute_at, trigger_date,
+                                                finished_at, failed_cause, created_at, updated_at)
+        values (#{jobName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{capitalSource,jdbcType=INTEGER}, #{jobType,jdbcType=INTEGER},
+                #{parameter,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{executeAt,jdbcType=TIMESTAMP}, #{triggerDate,jdbcType=TIMESTAMP},
+                #{finishedAt,jdbcType=TIMESTAMP}, #{failedCause,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="ai.lifo.data.entity.JobExecutionTraceEntity" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into jsd_xd_job_execution_trace
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jobName != null">
+                job_name,
+            </if>
+            <if test="methodName != null">
+                method_name,
+            </if>
+            <if test="capitalSource != null">
+                capital_source,
+            </if>
+            <if test ="jobType != null">
+                job_type,
+            </if>
+            <if test="parameter != null">
+                `parameter`,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="executeAt != null">
+                execute_at,
+            </if>
+            <if test="triggerDate != null">
+                trigger_date,
+            </if>
+            <if test="finishedAt != null">
+                finished_at,
+            </if>
+            <if test="failedCause != null">
+                failed_cause,
+            </if>
+            <if test="createdAt != null">
+                created_at,
+            </if>
+            <if test="updatedAt != null">
+                updated_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jobName != null">
+                #{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="capitalSource != null">
+                #{capitalSource,jdbcType=INTEGER},
+            </if>
+            <if test="jobType != null">
+                #{jobType,jdbcType=INTEGER},
+            </if>
+            <if test="parameter != null">
+                #{parameter,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="executeAt != null">
+                #{executeAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="triggerDate != null">
+                #{triggerDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishedAt != null">
+                #{finishedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="failedCause != null">
+                #{failedCause,jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="ai.lifo.data.entity.JobExecutionTraceEntity">
+        <!--@mbg.generated-->
+        update jsd_xd_job_execution_trace
+        <set>
+            <if test="jobName != null">
+                job_name = #{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                method_name = #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="capitalSource != null">
+                capital_source = #{capitalSource,jdbcType=INTEGER},
+            </if>
+            <if test="jobType != null">
+                job_type = #{jobType,jdbcType=INTEGER},
+            </if>
+            <if test="parameter != null">
+                `parameter` = #{parameter,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="executeAt != null">
+                execute_at = #{executeAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="triggerDate != null">
+                trigger_date = #{triggerDate, jdbcType=TIMESTAMP},
+            </if>
+            <if test="finishedAt != null">
+                finished_at = #{finishedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="failedCause != null">
+                failed_cause = #{failedCause,jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="ai.lifo.data.entity.JobExecutionTraceEntity">
+        <!--@mbg.generated-->
+        update jsd_xd_job_execution_trace
+        set job_name = #{jobName,jdbcType=VARCHAR},
+        method_name = #{methodName,jdbcType=VARCHAR},
+        capital_source = #{capitalSource,jdbcType=INTEGER},
+        job_type = #{jobType,jdbcType=INTEGER},
+        `parameter` = #{parameter,jdbcType=VARCHAR},
+        `status` = #{status,jdbcType=INTEGER},
+        execute_at = #{executeAt,jdbcType=TIMESTAMP},
+        trigger_date = #{triggerDate,jdbcType=TIMESTAMP},
+        finished_at = #{finishedAt,jdbcType=TIMESTAMP},
+        failed_cause = #{failedCause,jdbcType=VARCHAR},
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="findOneByCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from jsd_xd_job_execution_trace
+        <where>
+            <if test="condition.jobName != null" >
+                job_name = #{condition.jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.jobType != null">
+                and job_type = #{condition.jobType,jdbcType=INTEGER}
+            </if>
+            <if test="condition.parameter != null">
+                and parameter = #{condition.parameter,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.methodName != null ">
+                and method_name = #{condition.methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.capitalSource != null" >
+                and capital_source = #{condition.capitalSource,jdbcType=INTEGER}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and finished_at between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="findListByCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from jsd_xd_job_execution_trace
+        <where>
+            <if test="condition.jobName != null" >
+                job_name = #{condition.jobName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.jobType != null">
+                and job_type = #{condition.jobType,jdbcType=INTEGER}
+            </if>
+            <if test="condition.methodName != null ">
+                and method_name = #{condition.methodName,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.capitalSource != null" >
+                and capital_source = #{condition.capitalSource,jdbcType=INTEGER}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and finished_at between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startId != null and startId != ''">
+                and id &gt;= #{startId}
+            </if>
+        </where>
+        order by id
+        <if test="size != null and size != 0">
+            limit #{size}
+        </if>
+    </select>
+</mapper>

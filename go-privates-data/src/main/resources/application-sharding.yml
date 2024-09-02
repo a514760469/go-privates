@@ -1,0 +1,74 @@
+
+spring:
+    shardingsphere:
+        datasource:
+            master:
+                type: com.alibaba.druid.pool.DruidDataSource
+                driver-class-name: com.mysql.cj.jdbc.Driver
+                username: root
+                password: 123456
+                url: jdbc:mysql://localhost:3340/ms_db?useUnicode=true&characterEncoding=utf-8&useSSL=false
+                validationQuery: SELECT 1
+                initialSize: 5
+                minIdle: 5
+                maxActive: 20
+                maxWait: 60000
+                testWhileIdle: true
+                testOnBorrow: false
+                testOnReturn: false
+                maxPoolPreparedStatementPerConnectionSize: 20
+                connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+            slave0:
+                type: com.alibaba.druid.pool.DruidDataSource
+                driver-class-name: com.mysql.cj.jdbc.Driver
+                username: root
+                password: 123456
+                url: jdbc:mysql://localhost:3341/ms_db?useUnicode=true&characterEncoding=utf-8&useSSL=false
+                validationQuery: SELECT 1
+                initialSize: 5
+                minIdle: 5
+                maxActive: 20
+                maxWait: 60000
+                testWhileIdle: true
+                testOnBorrow: false
+                testOnReturn: false
+                maxPoolPreparedStatementPerConnectionSize: 20
+                connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+            names: master,slave0
+        props:
+            sql.show: true
+#        masterslave:
+#            load-balance-algorithm-type: round_robin
+#            master-data-source-name: master
+#            slave-data-source-names: slave0
+#            name: ms
+        sharding:
+            tables:
+                t_order:
+                    actual-data-nodes: ms.t_order_${0..1}
+                    table-strategy:
+                        inline:
+                            sharding-column: order_id
+                            algorithm-expression: t_order_${order_id % 2}
+                    key-generator:
+                        column: order_id
+                        type: SNOWFLAKE
+            master-slave-rules:
+                ms:
+                    master-data-source-name: master
+                    slave-data-source-names: slave0
+                    load-balance-algorithm-type: round_robin
+                    name: ms
+
+    autoconfigure:
+        exclude:
+            - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+            - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+management:
+    health:
+        db:
+            enabled: true
+mybatis-plus:
+    configuration:
+        map-underscore-to-camel-case: true
+    mapper-locations: classpath*:/mapper/**/*.xml

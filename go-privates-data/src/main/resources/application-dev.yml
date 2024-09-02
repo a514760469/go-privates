@@ -1,46 +1,4 @@
 spring:
-    shardingsphere:
-        datasource:
-            master:
-                type: com.alibaba.druid.pool.DruidDataSource
-                driver-class-name: com.mysql.cj.jdbc.Driver
-                username: root
-                password: 123456
-                url: jdbc:mysql://localhost:3340/ms_db?useUnicode=true&characterEncoding=utf-8&useSSL=false
-                validationQuery: SELECT 1
-                initialSize: 5
-                minIdle: 5
-                maxActive: 20
-                maxWait: 60000
-                testWhileIdle: true
-                testOnBorrow: false
-                testOnReturn: false
-                maxPoolPreparedStatementPerConnectionSize: 20
-                connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-            slave0:
-                type: com.alibaba.druid.pool.DruidDataSource
-                driver-class-name: com.mysql.cj.jdbc.Driver
-                username: root
-                password: 123456
-                url: jdbc:mysql://localhost:3341/ms_db?useUnicode=true&characterEncoding=utf-8&useSSL=false
-                validationQuery: SELECT 1
-                initialSize: 5
-                minIdle: 5
-                maxActive: 20
-                maxWait: 60000
-                testWhileIdle: true
-                testOnBorrow: false
-                testOnReturn: false
-                maxPoolPreparedStatementPerConnectionSize: 20
-                connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-            names: master,slave0
-        props:
-            sql-show: true
-        masterslave:
-            load-balance-algorithm-type: round_robin
-            master-data-source-name: master
-            slave-data-source-names: slave0
-            name: ms
     redis:
         timeout: 50000
         database: 0
@@ -53,10 +11,6 @@ spring:
         cluster:
             nodes: 127.0.0.1:7000, 127.0.0.1:7001, 127.0.0.1:7002, 127.0.0.1:7003, 127.0.0.1:7004, 127.0.0.1:7005
         password: 123456
-    autoconfigure:
-        exclude:
-            - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-            - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
 management:
     health:
         db:

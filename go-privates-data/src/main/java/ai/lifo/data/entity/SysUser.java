@@ -1,13 +1,12 @@
 package ai.lifo.data.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import lombok.Data;
 
 /**
  * @author zhanglifeng
@@ -23,8 +22,8 @@ public class SysUser {
     @TableField
     private String name;
 
-    @TableField
-    private Object sts;
+    @TableField(typeHandler = MybatisEnumTypeHandler.class)
+    private UserSts sts;
 
     @TableField(typeHandler = JacksonTypeHandler.class)
     private DescData descData;

@@ -14,8 +14,6 @@ spring:
                 maxActive: 20
                 maxWait: 60000
                 testWhileIdle: true
-                testOnBorrow: false
-                testOnReturn: false
                 maxPoolPreparedStatementPerConnectionSize: 20
                 connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
             slave0:
@@ -30,8 +28,6 @@ spring:
                 maxActive: 20
                 maxWait: 60000
                 testWhileIdle: true
-                testOnBorrow: false
-                testOnReturn: false
                 maxPoolPreparedStatementPerConnectionSize: 20
                 connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
             names: master,slave0
@@ -59,6 +55,9 @@ spring:
                     slave-data-source-names: slave0
                     load-balance-algorithm-type: round_robin
                     name: ms
+            default-key-generator:
+                type: SNOWFLAKE
+                column: id
 
     autoconfigure:
         exclude:

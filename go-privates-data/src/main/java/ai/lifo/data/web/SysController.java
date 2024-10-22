@@ -2,13 +2,10 @@ package ai.lifo.data.web;
 
 import ai.lifo.data.entity.SysUser;
 import ai.lifo.data.mapper.MybatisOrderRepository;
-import ai.lifo.data.mapper.OrderRepository;
 import ai.lifo.data.mapper.SysUserMapper;
 import ai.lifo.sharding.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.SQLException;
 
 /**
  * @author zhanglifeng
